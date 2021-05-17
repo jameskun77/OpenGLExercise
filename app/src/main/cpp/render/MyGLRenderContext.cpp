@@ -4,6 +4,7 @@
 
 #include "MyGLRenderContext.h"
 #include <TriangleSample.h>
+#include <TextureMapSample.h>
 #include "LogUtil.h"
 
 MyGLRenderContext* MyGLRenderContext::m_pContext = nullptr;
@@ -46,6 +47,9 @@ void MyGLRenderContext::SetParamsInt(int paramType, int value0, int value1)
         {
             case SAMPLE_TYPE_KEY_TRIANGLE:
                 m_pCurSample = new TriangleSample();
+                break;
+            case SAMPLE_TYPE_KEY_TEXTURE_MAP:
+                m_pCurSample = new TextureMapSample();
                 break;
             default:
                 m_pCurSample = nullptr;

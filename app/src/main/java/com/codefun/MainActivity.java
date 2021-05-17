@@ -37,6 +37,7 @@ import static android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY;
 import static com.codefun.MyGLSurfaceView.IMAGE_FORMAT_NV21;
 import static com.codefun.MyGLSurfaceView.IMAGE_FORMAT_RGBA;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE;
+import static com.codefun.MyNativeRender.SAMPLE_TYPE_TEXTURE_MAP;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE_TRIANGLE;
 
 public class MainActivity extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
@@ -187,7 +188,9 @@ public class MainActivity extends AppCompatActivity implements ViewTreeObserver.
                 switch (sampleType) {
                     case SAMPLE_TYPE_TRIANGLE:
                         break;
-
+                    case SAMPLE_TYPE_TEXTURE_MAP:
+                        loadRGBAImage(R.drawable.dzzz);
+                        break;
                     default:
                         break;
                 }
