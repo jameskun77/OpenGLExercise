@@ -5,6 +5,7 @@
 #include "MyGLRenderContext.h"
 #include <TriangleSample.h>
 #include <TextureMapSample.h>
+#include <FrameBufferSample.h>
 #include "LogUtil.h"
 
 MyGLRenderContext* MyGLRenderContext::m_pContext = nullptr;
@@ -50,6 +51,9 @@ void MyGLRenderContext::SetParamsInt(int paramType, int value0, int value1)
                 break;
             case SAMPLE_TYPE_KEY_TEXTURE_MAP:
                 m_pCurSample = new TextureMapSample();
+                break;
+            case SAMPLE_TYPE_KEY_FBO:
+                m_pCurSample = new FrameBufferSample();
                 break;
             default:
                 m_pCurSample = nullptr;
