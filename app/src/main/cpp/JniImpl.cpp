@@ -5,8 +5,10 @@
 #include "util/LogUtil.h"
 #include <MyGLRenderContext.h>
 #include "jni.h"
+#include "EGLRender.h"
 
 #define NATIVE_RENDER_CLASS_NAME "com/codefun/MyNativeRender"
+#define NATIVE_BG_RENDER_CLASS_NAME "com/codefun/egl/EglNativeRender"
 
 #ifdef __cplusplus
 extern "C" {
@@ -146,6 +148,34 @@ JNIEXPORT void JNICALL native_OnDrawFrame(JNIEnv *env, jobject instance)
 
 }
 
+JNIEXPORT void JNICALL native_EglRenderInit(JNIEnv* env,jobject instance)
+{
+    EGLRender::GetInstance()->Init();
+}
+
+JNIEXPORT void JNICALL native_EglRenderSetImageData(JNIEnv* env,jobject instance,
+        jbyteArray data,jint width,jint height){
+
+    int len = env->GetArrayLength (data);
+    uint8_t* buf = new uint8_t[len];
+    env->GetByteArrayRegion(data, 0, len, reinterpret_cast<jbyte*>(buf));
+    EGLRender::GetInstance()->SetImageData(buf, width, height);
+    delete[] buf;
+    env->DeleteLocalRef(data);
+}
+
+JNIEXPORT void JNICALL native_EglRenderSetIntParam(JNIEnv* env,jobject instance,
+                                                   jint type,jint param){
+    EGLRender::GetInstance()->SetIntParam(type, param);
+}
+
+JNIEXPORT void JNICALL native_EglRenderDraw(JNIEnv* env,jobject instance){
+    EGLRender::GetInstance()->Draw();
+}
+
+JNIEXPORT void JNICALL native_EglRenderUnInit(JNIEnv* env,jobject instance){
+    EGLRender::GetInstance()->UnInit();
+}
 
 #ifdef __cplusplus
 }
@@ -165,6 +195,14 @@ static JNINativeMethod g_RenderMethods[] = {
         {"native_OnDrawFrame",               "()V",       (void *)(native_OnDrawFrame)},
 };
 
+static JNINativeMethod g_BgRenderMethod[] = {
+        {"native_EglRenderInit","()V",(void*)(native_EglRenderInit)},
+        {"native_EglRenderSetImageData","([BII)V",(void*)native_EglRenderSetImageData},
+        {"native_EglRenderSetIntParams","(II)V",(void*)native_EglRenderSetIntParam},
+        {"native_EglRenderDraw","()V",(void*)native_EglRenderDraw},
+        {"native_EglRenderUnInit","()V",(void*)native_EglRenderUnInit}
+
+};
 
 static int RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodNum)
 {
@@ -217,6 +255,14 @@ extern "C" jint JNI_OnLoad(JavaVM *jvm, void *p)
         return JNI_ERR;
     }
 
+    regRet = RegisterNativeMethods(env,NATIVE_BG_RENDER_CLASS_NAME,g_BgRenderMethod,
+                                   sizeof(g_BgRenderMethod) / sizeof(g_BgRenderMethod[0]));
+
+    if (regRet != JNI_TRUE)
+    {
+        return JNI_ERR;
+    }
+
 
     return JNI_VERSION_1_6;
 }
@@ -230,5 +276,7 @@ extern "C" void JNI_OnUnload(JavaVM *jvm, void *p)
     }
 
     UnregisterNativeMethods(env, NATIVE_RENDER_CLASS_NAME);
+
+    UnregisterNativeMethods(env,NATIVE_BG_RENDER_CLASS_NAME);
 
 }

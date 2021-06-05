@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.codefun.adapter.MyRecyclerViewAdapter;
+import com.codefun.egl.EGLActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,7 @@ import static android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY;
 import static com.codefun.MyGLSurfaceView.IMAGE_FORMAT_NV21;
 import static com.codefun.MyGLSurfaceView.IMAGE_FORMAT_RGBA;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE;
+import static com.codefun.MyNativeRender.SAMPLE_TYPE_EGL;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE_FBO;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE_TEXTURE_MAP;
 import static com.codefun.MyNativeRender.SAMPLE_TYPE_TRIANGLE;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ViewTreeObserver.
             "YUV Rendering",
             "VAO&VBO",
             "FrameBuffer",
+            "EGL Background Render"
     };
 
     private MyGLSurfaceView mGLSurfaceView;
@@ -196,6 +199,9 @@ public class MainActivity extends AppCompatActivity implements ViewTreeObserver.
                         break;
                     case SAMPLE_TYPE_FBO:
                         loadRGBAImage(R.drawable.lye);
+                        break;
+                    case SAMPLE_TYPE_EGL:
+                        startActivity(new Intent(MainActivity.this, EGLActivity.class));
                         break;
                     default:
                         break;
